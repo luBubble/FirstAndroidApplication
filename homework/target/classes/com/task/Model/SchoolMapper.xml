@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--     namespace：必须与对应的接口全类名一致  UserMapper.java  id ：必须与对应接口的某个对应的方法名一致即必须要和UserMapper.java接口中的方法同名。  -->    
+<mapper namespace="com.task.Dao.SchoolDao">
+<!--设置domain类和数据库中表的字段一一对应，注意数据库字段和domain类中的字段名称不致，此处一定要！-->
+    <resultMap id="BaseResultMap" type="com.task.Bean.School">
+        <id column="School_id" property="School_id" jdbcType="INTEGER" />
+        <result column="School_num" property="School_num" jdbcType="INTEGER" />
+        <result column="School_name" property="School_name" jdbcType="CHAR" />
+        <result column="School_account" property="School_account" jdbcType="CHAR" />
+        <result column="School_password" property="School_password" jdbcType="CHAR" />
+    </resultMap>
+    <!-- 查询单条记录 -->
+    <select id="selectSchoolBySchool_id" parameterType="int" resultMap="BaseResultMap">
+        SELECT * FROM school WHERE School_id = #{School_id}
+    </select>
+    
+    <!-- 查询所有记录 -->
+     <select id="selectSchool" resultMap="BaseResultMap">
+         SELECT * FROM school
+     </select>
+     
+     <!-- 修改部分信息 -->
+     <update id="updateSchool" parameterType="School">
+          UPDATE school SET School_num=#{School_num},School_name=#{School_name},School_account=#{School_account},School_password=#{School_password}
+           WHERE School_id=#{School_id}
+     </update>
+     
+     <!-- 删除 -->
+     <delete id="deleteSchool_id"  parameterType="int">
+          DELETE FROM school WHERE School_id=#{School_id}    
+     </delete>
+     
+     <!-- 新增 -->
+     <insert id="saveSchoolDao" parameterType="School">
+          Insert into school(School_id,School_num,School_name,School_account,School_password) 
+          values (#{School_id},#{School_num},#{School_name},#{School_account},#{School_password})   
+     </insert>
+</mapper>

@@ -1,0 +1,21 @@
+package com.task.Service;
+
+import java.util.List;
+
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.task.BaseTest.SpringTestCase;
+import com.task.Bean.Student;
+import com.task.Bean.Teacher;
+
+public class UserServiceTest extends SpringTestCase{
+	@Autowired  
+    private TeacherService teacherService;
+	
+	@Test
+	public void save() {
+		List<Teacher> t = teacherService.selectTeacher();
+		System.out.println(t);
+	}
+}

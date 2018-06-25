@@ -1,0 +1,84 @@
+package com.task.Controller;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.task.Bean.Exam;
+import com.task.Bean.Grade;
+import com.task.Bean.Student;
+import com.task.Service.ExamService;
+import com.task.Service.GradeService;
+import com.task.Service.StudentService;
+
+@Controller
+@RequestMapping("/Exam")
+public class ExamMsgController {
+
+	@Autowired
+    private StudentService studentService;
+	
+	@Autowired
+    private GradeService gradeService;
+	
+	@Autowired
+    private ExamService examService;
+	
+	@RequestMapping("/allExamsOfTeacher/{teacher_id}")  //查询该老师所有成绩信息
+	public ResponseEntity<List<Exam>> listExams(@PathVariable int teacher_id)
+	{
+		List<Exam> examlist=examService.selectExamByTeacherId(teacher_id);
+        return new ResponseEntity<List<Exam>>(examlist, HttpStatus.OK);
+    }
+	
+	
+	@RequestMapping("/allExamsOfTeacher/{exam_id}")  //查询单个试卷信息
+	public ResponseEntity<Exam> oneExam(@PathVariable int exam_id)
+	{
+		Exam exam=examService.selectExamByExam_id(exam_id);
+        return new ResponseEntity<Exam>(exam, HttpStatus.OK);
+    }
+	
+	@RequestMapping("/Grade/{exam_id}") //该试卷成绩
+	public ResponseEntity<List<Grade>> studentGrades(@PathVariable int exam_id)
+	{
+		List<Grade> gradelist=gradeService.selectGradeByExamId(exam_id);
+        return new ResponseEntity<List<Grade>>(gradelist, HttpStatus.OK);
+    }
+	
+	@RequestMapping("/saveExam")  //新添试卷
+	public void saveExam(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException
+	{
+		String exam_name;
+		int teacher_id;
+
+		
+		
+		exam_name=request.getParameter("exam_name");
+		teacher_id=Integer.parseInt(request.getParameter("teacher_id"));
+		
+		Date date = new Date();//获得系统时间.
+		SimpleDateFormat sdf =   new SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " );
+        String nowTime = sdf.format(date);
+        Date time = sdf.parse( nowTime );
+        
+		Exam newExam=null;
+		newExam.setExam_name(exam_name);
+		newExam.setExam_teacherId(teacher_id);
+		newExam.setExam_time(time);
+		examService.saveExamDao(newExam);
+	}
+	
+}

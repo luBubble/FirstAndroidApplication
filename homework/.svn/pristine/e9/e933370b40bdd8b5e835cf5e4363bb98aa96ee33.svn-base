@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--     namespace：必须与对应的接口全类名一致  UserMapper.java  id ：必须与对应接口的某个对应的方法名一致即必须要和UserMapper.java接口中的方法同名。  -->    
+<mapper namespace="com.task.Dao.StudentDao">
+   <resultMap id="ResultMap" type="com.task.Bean.Student">
+        <id column="Student_id" property="Student_id" jdbcType="INTEGER" />
+         <result column="Student_teacherId" property="Student_teacherId" jdbcType="INTEGER" />
+         <result column="Student_schname" property="Student_schname" jdbcType="CHAR" />
+         <result column="Student_class" property="Student_class" jdbcType="CHAR" />
+         <result column="Student_name" property="Student_name" jdbcType="CHAR" />
+         <result column="Student_age" property="Student_age" jdbcType="INTEGER" />
+         <result column="Student_sex" property="Student_sex" jdbcType="CHAR" />
+         <result column="Student_password" property="Student_password" jdbcType="CHAR" />
+         <result column="Student_tel" property="Student_tel" jdbcType="CHAR" />
+         <result column="Student_account" property="Student_account" jdbcType="CHAR" />
+        <result column="Student_schoolId" property="Student_schoolId" jdbcType="INTEGER" />
+         <result column="Student_num" property="Student_num" jdbcType="INTEGER" />
+    </resultMap>
+    
+     <!-- 新增 -->
+     <insert id="saveStudentDao" parameterType="Student">
+          Insert into student(Student_id,Student_teacherId,Student_schname,Student_class,Student_name,Student_age,Student_sex,Student_password,Student_tel,Student_account,Student_schoolId,Student_num)
+           values (#{Student_id},#{Student_teacherId},#{Student_schname},#{Student_class},#{Student_name},#{Student_age},#{Student_sex},#{Student_password},#{Student_tel},#{Student_account},#{Student_schoolId}，#{Student_num})   
+     </insert>
+
+	<!-- 查询单条记录 -->
+    <select id="selectStudentByStudent_id" parameterType="int" resultMap="ResultMap">
+        SELECT * FROM student WHERE Student_id = #{Student_id}
+    </select>
+    
+	<!-- 查询所有记录 -->
+     <select id="selectStudent" resultMap="ResultMap">
+         SELECT * FROM student
+     </select>
+     
+     <!-- 查询某老师下所有学生 -->
+     <select id="selectStudentByTeacherId" parameterType="int" resultMap="ResultMap">
+         SELECT * FROM student WHERE Student_teacherId = #{Student_teacherId}
+     </select>
+     
+     <!-- 删除 -->
+     <delete id="deleteStudent"  parameterType="int">
+          DELETE FROM student WHERE Student_id=#{Student_id}    
+     </delete>
+     
+     <!-- 修改部分信息 -->
+     <update id="updateStudent" parameterType="Student">
+          UPDATE student SET Student_teacherId=#{Student_teacherId},Student_schname=#{Student_schname},Student_class=#{Student_class},
+          Student_name=#{Student_name},Student_age=#{Student_age},Student_sex=#{Student_sex},Student_password=#{Student_password},
+          Student_tel=#{Student_tel},Student_account=#{Student_account},Student_schoolId=#{Student_schoolId},Student_num=#{Student_num}
+           WHERE Student_id=#{Student_id}
+     </update>
+</mapper>

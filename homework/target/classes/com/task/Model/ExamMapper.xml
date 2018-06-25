@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--     namespace：必须与对应的接口全类名一致  UserMapper.java  id ：必须与对应接口的某个对应的方法名一致即必须要和UserMapper.java接口中的方法同名。  -->    
+<mapper namespace="com.task.Dao.ExamDao">
+   <resultMap id="ResultMap" type="com.task.Bean.Exam">
+        <id column="Exam_id" property="Exam_id" jdbcType="INTEGER" />
+         <result column="Exam_teacherId" property="Exam_teacherId" jdbcType="INTEGER" />
+         <result column="Exam_name" property="Exam_name" jdbcType="CHAR" />
+         <result column="Exam_time" property="Exam_time" jdbcType="CHAR" />
+    </resultMap> 
+    
+     <!-- 新增 -->
+     <insert id="saveExamDao" parameterType="Exam">
+          Insert into exam(Exam_teacherId,Exam_name,Exam_time)
+           values (#{Exam_teacherId},#{Exam_name},#{Exam_time})   
+     </insert>
+
+	<!-- 查询单条记录 -->
+    <select id="selectExamByExam_id" parameterType="int" resultMap="ResultMap">
+        SELECT * FROM exam WHERE Exam_id = #{Exam_id}
+    </select>
+    
+	<!-- 查询所有记录 -->
+     <select id="selectExam" resultMap="ResultMap">
+         SELECT * FROM exam
+     </select>
+     
+     <!-- 查询该老师所有成绩记录 -->
+     <select id="selectExamByTeacherId" parameterType="int" resultMap="ResultMap">
+         SELECT * FROM exam WHERE Exam_teacherId = #{Exam_teacherId}
+     </select>
+     
+     <!-- 删除 -->
+     <delete id="deleteExam"  parameterType="int">
+          DELETE FROM exam WHERE Exam_id=#{Exam_id}    
+     </delete>
+     
+     <!-- 修改部分信息 -->
+     <update id="updateExam" parameterType="Exam">
+          UPDATE exam SET Exam_teacherId=#{Exam_teacherId},Exam_name=#{Exam_name},Exam_time=#{Exam_time
+           WHERE Exam_id=#{Exam_id}
+     </update>
+</mapper>

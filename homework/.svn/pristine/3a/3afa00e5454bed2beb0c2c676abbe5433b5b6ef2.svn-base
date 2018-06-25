@@ -1,0 +1,128 @@
+package com.task.Controller;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.task.Bean.Exam;
+import com.task.Bean.Grade;
+import com.task.Bean.Grade_Exam_Teacher_Student;
+import com.task.Bean.Student;
+import com.task.Service.ExamService;
+import com.task.Service.GradeService;
+import com.task.Service.StudentService;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+@Controller
+@RequestMapping("/Exam")
+public class ExamMsgController {
+
+	@Autowired
+    private StudentService studentService;
+	
+	@Autowired
+    private GradeService gradeService;
+	
+	@Autowired
+    private ExamService examService;
+	
+	
+	@RequestMapping("/allExam") //学生所有成绩
+	public ResponseEntity<JSONObject> allExam(@RequestParam String aoData,HttpServletResponse response) {
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		JSONArray jsonarray = JSONArray.fromObject(aoData);
+		String sEcho = null;
+	    int iDisplayStart = 0; // 起始索引
+	    int iDisplayLength = 0; // 每页显示的行数
+	 
+	    for (int i = 0; i < jsonarray.size(); i++) {
+	        JSONObject obj = (JSONObject) jsonarray.get(i);
+	        if (obj.get("name").equals("sEcho"))
+	            sEcho = obj.get("value").toString();
+	 
+	        if (obj.get("name").equals("iDisplayStart"))
+	            iDisplayStart = obj.getInt("value");
+	 
+	        if (obj.get("name").equals("iDisplayLength"))
+	            iDisplayLength = obj.getInt("value");
+	        
+	    }
+	    List<Exam> userlist = examService.selectExam();
+		JSONObject getObj = new JSONObject();
+	    getObj.put("sEcho", sEcho);// DataTable用于渲染的信息
+	    getObj.put("iTotalRecords", userlist.size());//全部数据的行数
+	    getObj.put("iTotalDisplayRecords", userlist.size());//显示的行数 
+	    if(iDisplayStart+iDisplayLength<userlist.size())
+	    {
+	    	getObj.put("data", userlist.subList(iDisplayStart, iDisplayStart+iDisplayLength));//要以JSON格式返回
+	    }
+	    else
+	    {
+	    	getObj.put("data", userlist.subList(iDisplayStart, userlist.size()));//要以JSON格式返回
+	    }
+        return new ResponseEntity<JSONObject>(getObj,HttpStatus.OK);
+    }
+	
+	
+	@RequestMapping("/allExamsOfTeacher/{teacher_id}")  //查询该老师所有成绩信息
+	public ResponseEntity<List<Exam>> listExams(@PathVariable int teacher_id)
+	{
+		List<Exam> examlist=examService.selectExamByTeacherId(teacher_id);
+        return new ResponseEntity<List<Exam>>(examlist, HttpStatus.OK);
+    }
+	
+	
+	@RequestMapping("/allExamsOfTeacher/{exam_id}")  //查询单个试卷信息
+	public ResponseEntity<Exam> oneExam(@PathVariable int exam_id)
+	{
+		Exam exam=examService.selectExamByExam_id(exam_id);
+        return new ResponseEntity<Exam>(exam, HttpStatus.OK);
+    }
+	
+	@RequestMapping("/Grade/{exam_id}") //该试卷成绩
+	public ResponseEntity<List<Grade>> studentGrades(@PathVariable int exam_id)
+	{
+		List<Grade> gradelist=gradeService.selectGradeByExamId(exam_id);
+        return new ResponseEntity<List<Grade>>(gradelist, HttpStatus.OK);
+    }
+	
+	@RequestMapping("/saveExam")  //新添试卷
+	public void saveExam(HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException
+	{
+		String exam_name;
+		int teacher_id;
+
+		
+		
+		exam_name=request.getParameter("exam_name");
+		teacher_id=Integer.parseInt(request.getParameter("teacher_id"));
+		
+		Date date = new Date();//获得系统时间.
+		SimpleDateFormat sdf =   new SimpleDateFormat( " yyyy-MM-dd HH:mm:ss " );
+        String nowTime = sdf.format(date);
+        Date time = sdf.parse( nowTime );
+        
+		Exam newExam=null;
+		newExam.setExam_name(exam_name);
+		newExam.setExam_teacherId(teacher_id);
+		newExam.setExam_time(time);
+		examService.saveExamDao(newExam);
+	}
+	
+}

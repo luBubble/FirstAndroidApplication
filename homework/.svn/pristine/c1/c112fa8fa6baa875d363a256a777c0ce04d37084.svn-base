@@ -1,0 +1,154 @@
+package com.task.Controller;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.task.Bean.Grade;
+import com.task.Bean.Student;
+import com.task.Bean.Teacher;
+import com.task.Service.GradeService;
+import com.task.Service.StudentService;
+import com.task.Service.TeacherService;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+
+@Controller
+@RequestMapping("/Student")
+public class StudentMsgController {
+	
+	@Autowired
+    private StudentService studentService;
+	
+	@Autowired
+    private GradeService gradeService;
+	
+	@Autowired
+    private TeacherService teacherService;
+	
+	@RequestMapping("/allTeacher")  //查询所有老师信息
+	public ResponseEntity<JSONObject> allTeacher(@RequestParam String aoData,HttpServletResponse response) {
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		JSONArray jsonarray = JSONArray.fromObject(aoData);
+		String sEcho = null;
+	    int iDisplayStart = 0; // 起始索引
+	    int iDisplayLength = 0; // 每页显示的行数
+	 
+	    for (int i = 0; i < jsonarray.size(); i++) {
+	        JSONObject obj = (JSONObject) jsonarray.get(i);
+	        if (obj.get("name").equals("sEcho"))
+	            sEcho = obj.get("value").toString();
+	 
+	        if (obj.get("name").equals("iDisplayStart"))
+	            iDisplayStart = obj.getInt("value");
+	 
+	        if (obj.get("name").equals("iDisplayLength"))
+	            iDisplayLength = obj.getInt("value");
+	        
+	    }
+		List<Teacher> userlist=teacherService.selectTeacher();
+		JSONObject getObj = new JSONObject();
+	    getObj.put("sEcho", sEcho);// DataTable用于渲染的信息
+	    getObj.put("iTotalRecords", userlist.size());//全部数据的行数
+	    getObj.put("iTotalDisplayRecords", userlist.size());//显示的行数 
+	    if(iDisplayStart+iDisplayLength<userlist.size())
+	    {
+	    	getObj.put("data", userlist.subList(iDisplayStart, iDisplayStart+iDisplayLength));//要以JSON格式返回
+	    }
+	    else
+	    {
+	    	getObj.put("data", userlist.subList(iDisplayStart, userlist.size()));//要以JSON格式返回
+	    }
+        return new ResponseEntity<JSONObject>(getObj,HttpStatus.OK);
+    }
+	
+	@RequestMapping("/allStudentsOfTeacher/{teacher_id}")  //该老师所有学生信息
+	public ResponseEntity<List<Student>> listStudents(@PathVariable int teacher_id)
+	{
+		List<Student> userlist=studentService.selectStudentByTeacherId(teacher_id);
+        return new ResponseEntity<List<Student>>(userlist, HttpStatus.OK);
+    }
+	
+	@RequestMapping("/oneStudent/{student_id}") //某位学生信息
+	public ResponseEntity<Student> oneStudent(@PathVariable int student_id)
+	{
+		Student user=studentService.selectStudentByStudent_id(student_id);
+        return new ResponseEntity<Student>(user, HttpStatus.OK);
+    }
+
+	@RequestMapping("/StudentGrade/{student_id}") //学生所有成绩
+	public ResponseEntity<List<Grade>> studentGrades(@PathVariable int student_id)
+	{
+		List<Grade> gradelist=gradeService.selectGradeByStudentId(student_id);
+        return new ResponseEntity<List<Grade>>(gradelist, HttpStatus.OK);
+    }
+	
+	@RequestMapping("/oneGrade/{grade_id}") //某个成绩
+	public ResponseEntity<Grade> oneGrade(@PathVariable int grade_id)
+	{
+		Grade grade=gradeService.selectGradeByGrade_id(grade_id);
+        return new ResponseEntity<Grade>(grade, HttpStatus.OK);
+    }
+	
+	
+	@RequestMapping("/updateStudent")  //学生信息完善
+	public void updateStudent(HttpServletRequest request, HttpServletResponse response) {
+		String student_id = request.getParameter("student_id");
+		studentService.selectStudentByStudent_id(Integer.parseInt(student_id));
+		
+	}
+	
+	@RequestMapping("/updateTeacher")  //老师信息完善
+	public void updateTeacher(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String teacher_id = request.getParameter("teacher_id");
+		String school_id = request.getParameter("school_id");
+		String tel = request.getParameter("tel");
+		String description = request.getParameter("description");
+		Teacher tea = teacherService.selectTeacherByTeacher_id(Integer.parseInt(teacher_id));
+		tea.setTeacher_schoolId(Integer.parseInt(school_id));
+		tea.setTeacher_tel(tel);
+		tea.setTeacher_description(description);
+		
+		teacherService.updateTeacher(tea);
+		response.getWriter().write("1");
+	}
+	
+	@RequestMapping("/updatePassword")   //老师修改密码
+	public void updatePassword(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String teacher_id = request.getParameter("teacher_id");
+		String password = request.getParameter("password");
+		String new_password = request.getParameter("new_password");
+		Teacher tea = teacherService.selectTeacherByTeacher_id(Integer.parseInt(teacher_id));
+		if(tea.getTeacher_password().equals(password)) {
+			tea.setTeacher_password(new_password);
+			teacherService.updateTeacher(tea);
+			response.getWriter().write("1");
+		}
+		else {
+			response.getWriter().write("0");
+		}
+	}
+	
+	@RequestMapping("/updateGrade")   //修改学生成绩
+	public void updateGrade(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String grade_id = request.getParameter("grade_id");
+		String grade_num = request.getParameter("grade_num");
+		Grade grade = gradeService.selectGradeByGrade_id(Integer.parseInt(grade_id));
+		grade.setGrade_num(Integer.parseInt(grade_num));
+		gradeService.updateGrade(grade);
+		response.getWriter().write("1");
+	}
+}

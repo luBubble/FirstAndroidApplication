@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--     namespace：必须与对应的接口全类名一致  UserMapper.java  id ：必须与对应接口的某个对应的方法名一致即必须要和UserMapper.java接口中的方法同名。  -->    
+<mapper namespace="com.task.Dao.TeacherDao">
+<!--设置domain类和数据库中表的字段一一对应，注意数据库字段和domain类中的字段名称不致，此处一定要！-->
+    <resultMap id="BaseResultMap" type="com.task.Bean.Teacher">
+        <id column="Teacher_id" property="Teacher_id" jdbcType="INTEGER" />
+        <result column="Teacher_schoolId" property="Teacher_schoolId" jdbcType="INTEGER" />
+        <result column="Teacher_tel" property="Teacher_tel" jdbcType="CHAR" />
+        <result column="Teacher_password" property="Teacher_password" jdbcType="CHAR" />
+        <result column="Teacher_name" property="Teacher_name" jdbcType="CHAR" />
+        <result column="Teacher_account" property="Teacher_account" jdbcType="CHAR" />
+        <result column="Teacher_description" property="Teacher_description" jdbcType="CHAR" />
+        <result column="Teacher_num" property="Teacher_num" jdbcType="INTEGER" />
+    </resultMap>
+    <!-- 查询单条记录 -->
+    <select id="selectTeacherByTeacher_id" parameterType="int" resultMap="BaseResultMap">
+        SELECT * FROM teacher WHERE Teacher_id = #{Teacher_id}
+    </select>
+    <!-- 根据账号查找 -->
+    <select id="selectTeacherByTeacher_account" parameterType="String" resultMap="BaseResultMap">
+        SELECT * FROM teacher WHERE Teacher_account = #{Teacher_account}
+    </select>
+    
+    <!-- 查询所有记录 -->
+     <select id="selectTeacher" resultMap="BaseResultMap">
+         SELECT * FROM teacher
+     </select>
+     
+     <!-- 修改部分信息 -->
+     <update id="updateTeacher" parameterType="Teacher">
+          UPDATE teacher SET Teacher_tel=#{Teacher_tel},Teacher_name=#{Teacher_name},Teacher_account=#{Teacher_account},Teacher_description=#{Teacher_description}
+           WHERE Teacher_id=#{Teacher_id}
+     </update>
+     
+     <!-- 修改密码 -->
+     <update id="updateTeacherPassword" parameterType="Teacher">
+          UPDATE teacher SET Teacher_password=#{Teacher_password}
+           WHERE Teacher_id=#{Teacher_id}
+     </update>
+     
+     <!-- 删除 -->
+     <delete id="deleteTeacher"  parameterType="int">
+          DELETE FROM teacher WHERE Teacher_id=#{Teacher_id}    
+     </delete>
+     
+     <!-- 新增 -->
+     <insert id="saveTeacherDao" parameterType="Teacher">
+          Insert into teacher(Teacher_tel,Teacher_password,Teacher_account) 
+          values (#{Teacher_tel},#{Teacher_password},#{Teacher_account})   
+     </insert>
+</mapper>

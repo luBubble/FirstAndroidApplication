@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--     namespace：必须与对应的接口全类名一致  UserMapper.java  id ：必须与对应接口的某个对应的方法名一致即必须要和UserMapper.java接口中的方法同名。  -->    
+<mapper namespace="com.task.Dao.GradeDao">
+   <resultMap id="ResultMap" type="com.task.Bean.Grade">
+        <id column="Grade_id" property="Grade_id" jdbcType="INTEGER" />
+         <result column="Grade_teacherId" property="Grade_teacherId" jdbcType="INTEGER" />
+         <result column="Grade_studentId" property="Grade_studentId" jdbcType="INTEGER" />
+         <result column="Grade_examId" property="Grade_examId" jdbcType="INTEGER" />
+         <result column="Grade_wrong" property="Grade_wrong" jdbcType="CHAR" />
+         <result column="Grade_num" property="Grade_num" jdbcType="INTEGER" />
+    </resultMap>
+    
+     <!-- 新增 -->
+     <insert id="saveGradeDao" parameterType="Grade">
+          Insert into grade(Grade_id,Grade_teacherId,Grade_studentId,Grade_examId,Grade_wrong,Grade_num)
+           values (#{Grade_id},#{Grade_teacherId},#{Grade_studentId},#{Grade_examId},#{Grade_wrong},#{Grade_num})   
+     </insert>
+
+	<!-- 查询单条记录 -->
+    <select id="selectGradeByGrade_id" parameterType="int" resultMap="ResultMap">
+        SELECT * FROM grade WHERE Grade_id = #{Grade_id}
+    </select>
+    
+	<!-- 查询所有记录 -->
+     <select id="selectGrade" resultMap="ResultMap">
+         SELECT * FROM grade
+     </select>
+     
+     <!-- 查询某学生所有成绩记录 -->
+     <select id="selectGradeByStudentId" parameterType="int" resultMap="ResultMap">
+         SELECT * FROM grade WHERE Grade_studentId = #{Grade_studentId}
+     </select>
+     
+     <!-- 查询某试卷所有成绩记录 -->
+     <select id="selectGradeByExamId"  parameterType="int" resultMap="ResultMap">
+         SELECT * FROM grade WHERE Grade_examId = #{Grade_examId}
+     </select>
+     
+     <!-- 删除 -->
+     <delete id="deleteGrade"  parameterType="int">
+          DELETE FROM grade WHERE Grade_id=#{Grade_id}    
+     </delete>
+     
+     <!-- 修改部分信息 -->
+     <update id="updateGrade" parameterType="Grade">
+          UPDATE grade SET Grade_teacherId=#{Grade_teacherId},Grade_studentId=#{Grade_studentId},
+          Grade_examId=#{Grade_examId},Grade_wrong=#{Grade_wrong},Grade_num=#{Grade_num}
+           WHERE Grade_id=#{Grade_id}
+     </update>
+</mapper>

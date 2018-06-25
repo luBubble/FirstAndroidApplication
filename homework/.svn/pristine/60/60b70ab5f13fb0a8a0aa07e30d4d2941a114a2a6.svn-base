@@ -1,0 +1,74 @@
+package com.task.Controller;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.task.Bean.Grade;
+import com.task.Bean.Student;
+
+import com.task.Service.GradeService;
+import com.task.Service.StudentService;
+
+
+@Controller
+@RequestMapping("/Student")
+public class StudentMsgController {
+	
+	@Autowired
+    private StudentService studentService;
+	
+	@Autowired
+    private GradeService gradeService;
+	
+	@RequestMapping("/allStudentsOfTeacher/{teacher_id}")  //该老师所有学生信息
+	public ResponseEntity<List<Student>> listStudents(@PathVariable int teacher_id)
+	{
+		List<Student> userlist=studentService.selectStudentByTeacherId(teacher_id);
+        return new ResponseEntity<List<Student>>(userlist, HttpStatus.OK);
+    }
+	
+	@RequestMapping("/oneStudent/{student_id}") //某位学生信息
+	public ResponseEntity<Student> oneStudent(@PathVariable int student_id)
+	{
+		Student user=studentService.selectStudentByStudent_id(student_id);
+        return new ResponseEntity<Student>(user, HttpStatus.OK);
+    }
+
+	@RequestMapping("/StudentGrade/{student_id}") //学生所有成绩
+	public ResponseEntity<List<Grade>> studentGrades(@PathVariable int student_id)
+	{
+		List<Grade> gradelist=gradeService.selectGradeByStudentId(student_id);
+        return new ResponseEntity<List<Grade>>(gradelist, HttpStatus.OK);
+    }
+	
+	@RequestMapping("/oneGrade/{grade_id}") //某个成绩
+	public ResponseEntity<Grade> oneGrade(@PathVariable int grade_id)
+	{
+		Grade grade=gradeService.selectGradeByGrade_id(grade_id);
+        return new ResponseEntity<Grade>(grade, HttpStatus.OK);
+    }
+	
+	
+	@RequestMapping("/updateStudent")  //学生信息完善
+	public void updateStudent(HttpServletRequest request, HttpServletResponse response) {
+		int Student_id;
+		
+	}
+	
+	@RequestMapping("/updateTeacher")  //老师信息完善
+	public void updateTeacher(HttpServletRequest request, HttpServletResponse response) {
+		int Student_id;
+		
+	}
+}

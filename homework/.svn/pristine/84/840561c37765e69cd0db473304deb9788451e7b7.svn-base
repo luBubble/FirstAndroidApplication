@@ -1,0 +1,7 @@
+jdbc_driverClassName=com.mysql.jdbc.Driver
+jdbc_url=jdbc:mysql://gz-cdb-k10o6lls.sql.tencentcdb.com:63067/scanner
+jdbc_username=root
+jdbc_password=zhouwei123
+
+
+

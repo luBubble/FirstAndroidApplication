@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="grade_type">
+        <item>所有成绩</item>
+        <item>我批改的</item>
+        <item>老师批改的</item>
+        <item>家长批改的</item>
+    </string-array>
+    <string-array name="user_type">
+        <item>老师</item>
+        <item>学生</item>
+        <item>家长</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--     namespace：必须与对应的接口全类名一致  UserMapper.java  id ：必须与对应接口的某个对应的方法名一致即必须要和UserMapper.java接口中的方法同名。  -->    
+<mapper namespace="com.task.Dao.RelationDao">
+   <resultMap id="ResultMap" type="com.task.Bean.Relation">
+        <id column="Relation_id" property="Relation_id" jdbcType="INTEGER" />
+         <result column="Relation_status" property="Relation_status" jdbcType="INTEGER" />
+         <result column="Relation_state" property="Relation_state" jdbcType="INTEGER" />
+         <result column="Relation_studentId" property="Relation_studentId" jdbcType="INTEGER" />
+         <result column="Relation_teacherId" property="Relation_teacherId" jdbcType="INTEGER" />
+    </resultMap>
+    
+     <!-- 新增 -->
+     <insert id="saveRelationDao" parameterType="Relation">
+          Insert into relation(Relation_id,Relation_status,Relation_state,Relation_studentId,Relation_teacherId)
+           values (#{Relation_id},#{Relation_status},#{Relation_state},#{Relation_studentId},#{Relation_teacherId})   
+     </insert>
+
+	<!-- 查询单条记录 -->
+    <select id="selectRelationByRelation_id" parameterType="int" resultMap="ResultMap">
+        SELECT * FROM relation WHERE Relation_id = #{Relation_id}
+    </select>
+    
+	<!-- 查询所有记录 -->
+     <select id="selectRelation" resultMap="ResultMap">
+         SELECT * FROM relation
+     </select>
+     <!-- 查询所有记录 -->
+     <select id="selectRelationByTeacher_id" parameterType="int" resultMap="ResultMap">
+         SELECT * FROM relation WHERE Relation_teacherId = #{Relation_teacherId}
+     </select>
+     <!-- 查询所有记录 -->
+     <select id="selectRelationByStudent_id" parameterType="int" resultMap="ResultMap">
+         SELECT * FROM relation WHERE Relation_studentId = #{Relation_studentId}
+     </select>
+     
+     <!-- 删除 -->
+     <delete id="deleteRelation"  parameterType="int">
+          DELETE FROM relation WHERE Relation_id=#{Relation_id}    
+     </delete>
+     
+     <!-- 修改部分信息 -->
+     <update id="updateRelation" parameterType="Relation">
+          UPDATE relation SET Relation_status=#{Relation_status},Relation_state=#{Relation_state},Relation_studentId=#{Relation_studentId},Relation_teacherId=#{Relation_teacherId}
+           WHERE Relation_id=#{Relation_id}
+     </update>
+</mapper>

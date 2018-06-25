@@ -1,0 +1,86 @@
+<resources>
+    <string name="app_name">Tesseract-OCR-Scanner</string>
+    <!--扫一扫-->
+    <string name="title_activity_scan_qr_code">扫一扫</string>
+    <string name="close">关闭</string>
+    <string name="auto_scan_notification">将扫描内容放入框内，即可自动扫描</string>
+    <string name="notification">提示</string>
+    <string name="positive_button_confirm">确认</string>
+    <string name="could_not_read_qr_code_from_scanner">对不起，无法打开扫出的内容</string>
+    <string name="camera_not_found">未检测到相机</string>
+    <string name="is_qr_code_scanner">是否扫码 </string>
+    <string name="is_open_flashlight">是否打开闪光灯 </string>
+    <string name="take_photos">拍照识别号码</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="btn_insert">插入</string>
+    <string name="btn_delete">删除</string>
+    <string name="btn_update">修改</string>
+    <string name="btn_query">查询</string>
+    <string name="btn_camera">扫描</string>
+    <string name="btn_broadcast">播报</string>
+
+    <string name="insert_text_name">姓名</string>
+    <string name="insert_text_age">年龄</string>
+    <string name="insert_text_sex">性别</string>
+    <string name="insert_confirm">确认插入</string>
+    <string name="insert_cancel">取消插入</string>
+    <string name="delete_text_id">ID</string>
+    <string name="delete_confirm">确定删除</string>
+    <string name="delete_cancel">取消删除</string>
+    <string name="update_text_id">ID</string>
+    <string name="update_text_name">姓名</string>
+    <string name="update_text_age">年龄</string>
+    <string name="update_text_sex">性别</string>
+    <string name="update_confirm">确认更新</string>
+    <string name="update_cancel">取消更新</string>
+
+    <string name="my_student">我的学生</string>
+    <string name="grade">成绩</string>
+    <string name="student_grade">学生成绩</string>
+    <string name="my_paper">我的试卷</string>
+    <string name="more">更多</string>
+    <string name="search">搜索</string>
+    <string name="student_class">班别</string>
+    <string name="student_id">学号</string>
+    <string name="exam_name">考试</string>
+    <string name="operate_man">批改人</string>
+
+    <string name="register">注册</string>
+    <string name="login">登录</string>
+
+    <string name="teacher">老师</string>
+    <string name="parent">家长</string>
+    <string name="student">学生</string>
+    <string  name="goto_register"><u>没有账号，前往注册</u></string>
+    <string  name="goto_login"><u>已有账号，前往登录</u></string>
+    <string name="school">学校：</string>
+    <string name="phone">手机：</string>
+    <string name="email">邮箱：</string>
+    <string name="work">职业：</string>
+    <string name="msg_class">班别：</string>
+    <string name="msg_age">年龄：</string>
+    <string name="msg_sex">性别：</string>
+    <string name="student_name">姓名：</string>
+    <string name="msg_account">学号：</string>
+    <string name="user_description">个人介绍：</string>
+    <string name="check_grade">查看学生成绩</string>
+
+    <string name="agree">同意</string>
+    <string name="refuse">拒绝</string>
+    <string name="edit_message">修改资料</string>
+    <string name="edit_psw">修改密码</string>
+    <string name="save">保存</string>
+    <string name="cancel">取消</string>
+    <string name="old_psw">原密码：</string>
+    <string name="new_psw">新密码：</string>
+    <string name="confirm_psw">确认密码：</string>
+    <string name="my_grade">我的成绩</string>
+    <string name="teacher_parents">老师/家长</string>
+    <string name="next_step">下一步</string>
+    <string name="save_grade">选择学生</string>
+    <array name="sex_array">
+        <item>男</item>
+        <item>女</item>
+    </array>
+</resources>
